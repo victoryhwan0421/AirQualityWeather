@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -32,6 +33,7 @@ class FragmentAirQuality : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.v("AirQuality", "onCreate")
         bindViews()
         initVariables()
         requestLocationPermissions()
@@ -87,6 +89,7 @@ class FragmentAirQuality : Fragment() {
     // 스와프하여 새로고침
     private  fun bindViews() {
         binding.refresh.setOnRefreshListener {
+            Log.v("AirQuality", "Refresh")
             fetchAirQualityData()
         }
     }
@@ -133,10 +136,11 @@ class FragmentAirQuality : Fragment() {
         ).addOnSuccessListener { location ->
             scope.launch {
                 // 시작하고 errorDescription 발생 후 재시도했을 경우 에러화면을 제거해야하므로
-                binding.errorDescriptionTextView.visibility =View.GONE
+                binding.errorDescriptionTextView.visibility = View.GONE
                 try {
                     val monitoringStation =
                         Repository.getNearbyMonitoringStation(location.latitude, location.longitude)
+                    Log.v("AirQuality",  "latitude: " + location.latitude + "\n" + "longitude: " + location.longitude)
 
                     // 관측소를 잘 불러오는지 확인!
                     // Optinal이므로 monitoringStation?. 로 safe_call 로 부르기
@@ -147,6 +151,7 @@ class FragmentAirQuality : Fragment() {
                     //binding.textView.text = measuredValue.toString()
                     displayAirQualityData(monitoringStation, measuredValue!!)
                 } catch (exception: Exception) {
+                    Log.v("AirQuality", "Raise Exception_catch")
                     // 문제가 발생했다면 errorDescriptionTextView 보이기
                     binding.errorDescriptionTextView.visibility =View.VISIBLE
                     // 정상적으로 로딩되었다가 재시도할 때 Exception 이 발생하여
@@ -154,6 +159,7 @@ class FragmentAirQuality : Fragment() {
                     binding.contentsLayout.alpha = 0F
 
                 } finally {
+                    Log.v("AirQuality", "finally_Done")
                     // 모든 처리가 잘 이루어졌다면, 로딩창과, 새로고침 마무리
                     binding.progressBar.visibility = View.GONE
                     binding.refresh.isRefreshing = false

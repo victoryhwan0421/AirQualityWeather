@@ -9,6 +9,7 @@ import retrofit2.http.Query
 
 interface AirKoreaApiService {
 
+    /// Call Back URL: http://~~go.kr/ 이하 주소를 @GET()내부에 입력
     @GET("B552584/MsrstnInfoInqireSvc/getNearbyMsrstnList" +
     "?serviceKey=${BuildConfig.AIR_KOREA_SERVICE_KEY}"+
     "&returnType=json")
@@ -17,7 +18,7 @@ interface AirKoreaApiService {
         @Query("tmY") tmY: Double
     ): Response<MonitoringStationsResponse>
 
-
+    /// Call Back URL: http://~~go.kr/ 이하 주소를 @GET()내부에 입력
     @GET("B552584/ArpltnInforInqireSvc/getMsrstnAcctoRltmMesureDnsty"+
             "?serviceKey=${BuildConfig.AIR_KOREA_SERVICE_KEY}" +
             "&returnType=json" +
