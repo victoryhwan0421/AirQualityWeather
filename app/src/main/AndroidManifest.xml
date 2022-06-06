@@ -19,7 +19,7 @@
         <activity android:name=".MainActivity"/>
 <!--            android:screenOrientation="portrait"-->
 <!--            android:exported="true">-->
-        <activity android:name=".SplashActivity">
+        <activity android:name=".package_loading.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -38,7 +38,7 @@
         <service android:name=".appwidget.SimpleAirQualityWidgetProvider$UpdateWidgetService"
             android:foregroundServiceType="location"/>
 
-        <service android:name=".MyFirebaseMessagingService"
+        <service android:name=".package_firebase.MyFirebaseMessagingService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>

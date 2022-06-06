@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".FragmentAirQuality">
+    tools:context=".package_airquality.FragmentAirQuality">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -44,7 +44,8 @@
                 android:layout_height="match_parent"
                 android:alpha="0"
                 tools:background="@color/gray"
-                tools:context=".MainActivity">
+                tools:context=".MainActivity"
+                tools:alpha="1">
 
                 <!--  현재 위치  -->
                 <TextView
@@ -90,7 +91,7 @@
                     android:id="@+id/fineDustInformationTextView"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="30dp"
                     android:gravity="center"
                     android:textColor="@color/white"
                     android:textSize="16sp"
@@ -117,7 +118,7 @@
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginHorizontal="20dp"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="40dp"
                     android:alpha="0.5"
                     android:background="@color/white"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -141,28 +142,28 @@
                         layout="@layout/view_measured_item"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="0" />
+                        android:layout_weight="1" />
 
                     <include
                         android:id="@+id/co2Item"
                         layout="@layout/view_measured_item"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="0" />
+                        android:layout_weight="1" />
 
                     <include
                         android:id="@+id/o3Item"
                         layout="@layout/view_measured_item"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="0" />
+                        android:layout_weight="1" />
 
                     <include
                         android:id="@+id/no2Item"
                         layout="@layout/view_measured_item"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="0" />
+                        android:layout_weight="1" />
                 </LinearLayout>
 
 
@@ -172,7 +173,7 @@
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginHorizontal="20dp"
-                    android:layout_marginBottom="12dp"
+                    android:layout_marginBottom="40dp"
                     android:alpha="0.5"
                     android:background="@color/white"
                     app:layout_constraintBottom_toTopOf="@id/measuringStationAddressTextView"

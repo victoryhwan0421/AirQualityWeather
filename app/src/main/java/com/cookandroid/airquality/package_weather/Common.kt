@@ -1,4 +1,4 @@
-package com.cookandroid.airquality
+package com.cookandroid.airquality.package_weather
 
 import android.graphics.Point
 

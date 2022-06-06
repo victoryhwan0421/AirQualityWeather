@@ -5,6 +5,9 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.cookandroid.airquality.package_airquality.FragmentAirQuality
+import com.cookandroid.airquality.package_firebase.FragmentStorage
+import com.cookandroid.airquality.package_weather.FragmentWeatherForecast
 
 import com.cookandroid.airquality.databinding.ActivityMainBinding
 
@@ -22,8 +25,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        //Start_Loading()
 
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)

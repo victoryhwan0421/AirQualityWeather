@@ -1,4 +1,4 @@
-package com.cookandroid.airquality
+package com.cookandroid.airquality.package_airquality
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -60,11 +60,11 @@ class FragmentAirQuality : Fragment() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
         val locationPermissionGranted =
-            requestCode == FragmentAirQuality.REQUEST_ACCESS_LOCATION_PERMISSIONS &&
+            requestCode == REQUEST_ACCESS_LOCATION_PERMISSIONS &&
                     grantResults[0] == PackageManager.PERMISSION_GRANTED
 
         val backgroundLocationPermissionGranted =
-            requestCode == FragmentAirQuality.REQUEST_BACKGROUND_ACCESS_LOCATION_PERMISSIONS &&
+            requestCode == REQUEST_BACKGROUND_ACCESS_LOCATION_PERMISSIONS &&
                     grantResults[0] == PackageManager.PERMISSION_GRANTED
 
 
@@ -140,7 +140,6 @@ class FragmentAirQuality : Fragment() {
                 try {
                     val monitoringStation =
                         Repository.getNearbyMonitoringStation(location.latitude, location.longitude)
-                    Log.v("AirQuality",  "latitude: " + location.latitude + "\n" + "longitude: " + location.longitude)
 
                     // 관측소를 잘 불러오는지 확인!
                     // Optinal이므로 monitoringStation?. 로 safe_call 로 부르기

@@ -1,4 +1,4 @@
-package com.cookandroid.airquality
+package com.cookandroid.airquality.package_firebase
 
 import android.annotation.SuppressLint
 import android.app.Notification
@@ -14,10 +14,10 @@ import android.widget.RemoteViews
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import com.cookandroid.airquality.R
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.cookandroid.airquality.databinding.FragmentWeatherForecastBinding
-
 
 class MyFirebaseMessagingService: FirebaseMessagingService() {
 
@@ -33,14 +33,11 @@ class MyFirebaseMessagingService: FirebaseMessagingService() {
 
         /// 실질적인 알림 생성하기
         val type = remoteMessage.data["type"]
-            ?.let {NotificationType.valueOf(it)}
+            ?.let { NotificationType.valueOf(it)}
         val title = remoteMessage.data["title"]
         val message = remoteMessage.data["message"]
 
         type ?: return
-
-
-
 
         NotificationManagerCompat.from(this)
             .notify(type.id, createNotification(type, title, message))

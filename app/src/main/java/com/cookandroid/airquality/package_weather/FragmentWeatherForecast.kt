@@ -1,4 +1,4 @@
-package com.cookandroid.airquality
+package com.cookandroid.airquality.package_weather
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -18,10 +18,10 @@ import com.cookandroid.airquality.data.models.ModelWeather.ITEM
 import com.cookandroid.airquality.data.models.ModelWeather.ModelWeather
 import com.cookandroid.airquality.data.models.ModelWeather.WEATHER
 import com.cookandroid.airquality.databinding.FragmentWeatherForecastBinding
-import com.cookandroid.airquality.databinding.FragmentAirQualityBinding
-import com.cookandroid.airquality.data.models.monitoringstations.MonitoringStation
 import com.google.android.gms.location.*
 import com.google.android.gms.tasks.CancellationTokenSource
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
@@ -36,12 +36,17 @@ class FragmentWeatherForecast : Fragment() {
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private var cancellationTokenSource: CancellationTokenSource? = null
     private val binding_w by lazy { FragmentWeatherForecastBinding.inflate(layoutInflater) }
-    //private val binding_AirQuality = FragmentAirQualityBinding.inflate(layoutInflater)  //
     private val scope = MainScope()
 
     private var baseDate = "20210510" // 발표 일자
     private var baseTime = "1400"     // 발표 시각
     private var curPoint: Point? = null  // 현재 위치의 격자 좌표를 저장할 포인트
+
+
+    val database : FirebaseDatabase = FirebaseDatabase.getInstance()
+    val myRef : DatabaseReference = database.getReference("WeatherInfo")
+
+
 
 
     @SuppressLint("SetTextI18n")
@@ -68,9 +73,7 @@ class FragmentWeatherForecast : Fragment() {
         // return inflater.inflate(R.layout.fragment_weather_forecast, container, false)
         Log.v("Weather", "onCreateView()")
         return binding_w.root
-
     }
-
 
     @SuppressLint("MissingPermission")
     override fun onRequestPermissionsResult(
@@ -107,7 +110,6 @@ class FragmentWeatherForecast : Fragment() {
         }
     }
 
-
     @SuppressLint("SetTextI18n")
     private fun onStartTextView(){
         // 오늘 날짜 텍스트뷰 설정
@@ -118,7 +120,6 @@ class FragmentWeatherForecast : Fragment() {
             ) + "날씨"
     }
 
-
     // 스와프하여 새로고침
     private fun bindViews() {
         binding_w.refreshWeather.setOnRefreshListener {
@@ -127,13 +128,11 @@ class FragmentWeatherForecast : Fragment() {
         }
     }
 
-
     private fun initVariables() {
         fusedLocationProviderClient =
             LocationServices.getFusedLocationProviderClient(getActivity())
         // this -> getActivity()
     }
-
 
     private fun requestLocationPermissions() {
         requestPermissions(
@@ -153,6 +152,17 @@ class FragmentWeatherForecast : Fragment() {
         )
     }
 
+    fun WriteWeatherModel(rainType: String, humidity: String, sky: String, temp: String, fcstTime: String, count: Int){
+        val weathermodel = ModelWeather(rainType, humidity, sky, temp, fcstTime)
+        when(count < 6){
+            count == 0 -> myRef.child("WeatherInfo").child("WeatherModel0").setValue(weathermodel)
+            count == 1 -> myRef.child("WeatherInfo").child("WeatherModel1").setValue(weathermodel)
+            count == 2 -> myRef.child("WeatherInfo").child("WeatherModel2").setValue(weathermodel)
+            count == 3 -> myRef.child("WeatherInfo").child("WeatherModel3").setValue(weathermodel)
+            count == 4 -> myRef.child("WeatherInfo").child("WeatherModel4").setValue(weathermodel)
+            count == 5 -> myRef.child("WeatherInfo").child("WeatherModel5").setValue(weathermodel)
+        }
+    }
 
     /// 날씨 가져와서 설정하기
     private fun setWeather(nx: Int, ny: Int) {
@@ -192,11 +202,12 @@ class FragmentWeatherForecast : Fragment() {
                     val it: List<ITEM> = response.body()!!.response.body.items.item
 
                     // 현재 시각부터 1시간 뒤의 날씨 6개를 담을 배열
-                    val weatherArr = arrayOf(ModelWeather(), ModelWeather(), ModelWeather(), ModelWeather(), ModelWeather(), ModelWeather()
-                    )
+                    val weatherArr = arrayOf(ModelWeather(), ModelWeather(), ModelWeather(), ModelWeather(), ModelWeather(), ModelWeather())
 
                     // 배열 채우기
                     var index = 0
+                    var count = 0
+                    weatherArr[0].fcstTime = "지금" //
                     val totalCount = response.body()!!.response.body.totalCount - 1
                     for (i in 0..totalCount) {
                         index %= 6
@@ -207,19 +218,23 @@ class FragmentWeatherForecast : Fragment() {
                             "T1H" -> weatherArr[index].temp = it[i].fcstValue // 기온
                             else -> continue
                         }
-                        index++
+                        weatherArr[index].fcstTime = it[index].fcstTime //
+                        if(count < 6){
+                            Log.v("count", count.toString())
+                            WriteWeatherModel(weatherArr[index].rainType, weatherArr[index].humidity, weatherArr[index].sky, weatherArr[index].temp, weatherArr[index].fcstTime, count)
+                            index++
+                            count++
+                        }else{
+                            count = 0
+                            continue
+                        }
+
                     }
-
-                    weatherArr[0].fcstTime = "지금"
-                    // 각 날짜 배열 시간 설정
-                    for (i in 1..5) {
-                        weatherArr[i].fcstTime = it[i].fcstTime
-                        Log.v("1", "weatherArr[i].sky" + weatherArr[i].sky)
-                        Log.v("1", "weatherArr[i].humidity" + weatherArr[i].humidity)
-                        Log.v("1", "weatherArr[i].rainType" + weatherArr[i].rainType)
-                    }
-
-
+//                    weatherArr[0].fcstTime = "지금"
+//                    // 각 날짜 배열 시간 설정
+//                    for (i in 1..5) {
+//                        weatherArr[i].fcstTime = it[i].fcstTime
+//                    }
 
                     // 리사이클러 뷰에 데이터 연결
                     binding_w.weatherRecyclerView.adapter = WeatherAdapter(weatherArr)
@@ -236,6 +251,9 @@ class FragmentWeatherForecast : Fragment() {
         })
     }
 
+
+
+
     // 현재 위치의 위경도를 격자 좌표로 변환 후 해당 위치의 날씨정보 설정하기
     @SuppressLint("MissingPermission", "SetTextI18n")
     private fun fetchWeatherForecastData() {
@@ -244,8 +262,7 @@ class FragmentWeatherForecast : Fragment() {
         cancellationTokenSource = CancellationTokenSource()
         fusedLocationProviderClient
             .getCurrentLocation(LocationRequest.
-                PRIORITY_HIGH_ACCURACY,
-                cancellationTokenSource!!.token)
+                PRIORITY_HIGH_ACCURACY, cancellationTokenSource!!.token)
             .addOnSuccessListener { location ->
                 scope.launch {
                     binding_w.errorDescriptionTextViewWeather.visibility = View.GONE
@@ -293,6 +310,7 @@ class FragmentWeatherForecast : Fragment() {
 
                 } catch (exception: Exception) {
                     // Error 발생 시, errorDescriptionTextViewWeather 보이기
+                        Log.v("WeatherError", "Error")
                     binding_w.errorDescriptionTextViewWeather.visibility = View.VISIBLE
 
                     // 정상적으로 로딩 후 재시도하여 Exception이 발생하여

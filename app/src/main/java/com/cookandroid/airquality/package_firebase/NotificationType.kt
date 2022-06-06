@@ -1,4 +1,4 @@
-package com.cookandroid.airquality
+package com.cookandroid.airquality.package_firebase
 
 enum class NotificationType(val title: String, val id: Int) {
     NORMAL("일반 알림", 0),

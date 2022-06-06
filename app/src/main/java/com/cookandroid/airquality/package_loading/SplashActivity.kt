@@ -1,10 +1,12 @@
-package com.cookandroid.airquality
+package com.cookandroid.airquality.package_loading
 
 import android.content.Intent
 import android.os.Handler
 import com.airbnb.lottie.LottieAnimationView
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.cookandroid.airquality.MainActivity
+import com.cookandroid.airquality.R
 
 
 class SplashActivity : AppCompatActivity() {

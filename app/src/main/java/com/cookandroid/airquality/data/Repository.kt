@@ -54,21 +54,6 @@ object Repository {
             ?.firstOrNull() // 만약에 데이터가 없다면 null 반환
 
 
-//    ///  기상정보 호출
-//    ///  날씨 호출 인자 모두 추가하고 return으로  weatherApiService 넘겨줘야
-//    suspend fun getLastesWeatherData
-//                (num_of_rows: Int, page_no: Int, data_type: String, base_date:String, base_time:String, nx: Int, ny: Int) : WeatherForecastApiService {
-//        weatherApiService
-//            .GetWeatherInfo(num_of_rows, page_no, data_type, base_date, base_time, nx, ny)
-////            .body()
-////            ?.response
-////            ?.body
-////            ?.WeatherInfo
-//
-//        return weatherApiService
-//    }
-
-
     private fun getRetrofit(): Retrofit {
         return Retrofit.Builder()
             .baseUrl(Url.WEATHER_SERVICE_API_BASE_URL)
@@ -101,20 +86,6 @@ object Repository {
             .build()  // 여기까지 Air_Korea_API_Service 완성
             .create()
     }
-
-//    /// 서비스가 인터페이스 형식에서 API를 call할 때 WeatherInterface를 이용할 수 없다.
-//    /// 그러므로 retrofit 구현체가 필요
-//    private val weatherApiService: WeatherForecastApiService by lazy {
-//        Retrofit.Builder()
-//            .baseUrl(Url.WEATHER_SERVICE_API_BASE_URL) // baseUrl
-//            .addConverterFactory(GsonConverterFactory.create()) // Gson으로 변환
-//            .client(buildHttpClient())
-//            .build()
-//            .create()
-//    }
-
-
-
 
 
     // logging 목적

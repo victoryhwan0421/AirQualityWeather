@@ -1,7 +1,6 @@
-package com.cookandroid.airquality
+package com.cookandroid.airquality.package_firebase
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -31,10 +30,6 @@ class FragmentStorage : Fragment() {
         return binding.root
     }
 
-//    override fun onNewIntent(intent: Intent?) {
-//        super.onNewIntent(intent)
-//        updateResult(true)
-//    }
 
     private fun initFirebase() {
         FirebaseMessaging.getInstance().token
@@ -45,6 +40,7 @@ class FragmentStorage : Fragment() {
             }
     }
 
+
     @SuppressLint("SetTextI18n")
     private fun updateResult(isNewIntent: Boolean = false){
 //        binding.resultTextView.text = (intent.getStringExtra("notificationType") ?: "앱 런처") +
@@ -53,6 +49,8 @@ class FragmentStorage : Fragment() {
 //        }else{
 //            "(으)로 실행했습니다."
 //        }
+        //binding_w.weatherRecyclerView.adapter = WeatherAdapter(weatherArr)
+
         binding.resultTextView.text = if(isNewIntent){
             "(으)로 갱신했습니다."
         }else{
